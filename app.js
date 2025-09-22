@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { json , urlencoded } from "express";
-import cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser"; 
 import dbConnect from "./src/config/dbConnect.js";
 import authRouter from "./src/routes/auth.routes.js";
 import subscriptionRouter from "./src/routes/subscription.routes.js";
