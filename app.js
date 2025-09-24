@@ -15,13 +15,13 @@ const app = express();
 
 
 // Moddleware
-app.use(urlencoded({extended:false})); // For form boy requests
-app.use(errorMiddleware);
+app.use(urlencoded({extended:false})); // For form body requests
 app.use(cookieParser());
 app.use(json());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/subscription", subscriptionRouter);
+app.use(errorMiddleware); // should e in the end always 
 
 
 
