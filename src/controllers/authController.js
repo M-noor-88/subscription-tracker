@@ -56,7 +56,7 @@ export const signIn = async (req, res, next) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            const error = new Error("This user Already Exist");
+            const error = new Error("Not found");
             error.statusCode = 409;
             throw error;
         }
