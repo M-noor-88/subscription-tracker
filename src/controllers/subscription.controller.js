@@ -1,5 +1,8 @@
+import { workflowClient } from "../config/upstash.js";
 import Subscription from "../models/subscription.model.js";
 import mongoose from "mongoose";
+
+
 export const createSubscription = async (req, res, next) => {
     try {
         const subscription = await Subscription.create({
@@ -7,9 +10,22 @@ export const createSubscription = async (req, res, next) => {
             user: req.user._id
         });
 
+        const { workflowRunId } = await workflowClient.trigger({
+            url: `${process.env.SERVER_URL}/api/v1/workflows/subscription/reminder`,
+            body: {
+                subscriptionId: subscription.id
+            },
+            headers: {
+                'content-type': 'application/json',
+            },
+            retries: 0,
+        });
+
         res.status(201).json({
             success: true,
-            data: subscription,
+            data: {
+                subscription, workflowRunId
+            }
         });
 
     } catch (error) {
@@ -31,8 +47,6 @@ export const getUserSubscription = async (req, res, next) => {
             success: true,
             data: subscripitons
         });
-
-
 
     } catch (error) {
         next(error);
@@ -56,8 +70,6 @@ export const getUserAuthSubscription = async (req, res, next) => {
             message: "without passing the user id",
             data: subscripitons
         });
-
-
 
     } catch (error) {
         next(error);
