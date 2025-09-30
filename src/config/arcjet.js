@@ -1,5 +1,7 @@
 import arcjet, { detectBot, shield, tokenBucket } from "@arcjet/node";
+import dotenv from "dotenv";
 
+dotenv.config();
 
 const aj = arcjet({
     // Get your site key from https://app.arcjet.com and set it as an environment
@@ -27,10 +29,14 @@ const aj = arcjet({
             // Tracked by IP address by default, but this can be customized
             // See https://docs.arcjet.com/fingerprints
             // characteristics: ["ip.src"],
-            refillRate: 2, // Refill 5 tokens per interval
-            interval: 5, // Refill every 10 seconds
-            capacity: 5, // Bucket capacity of 10 tokens
+            refillRate: 5, // Refill 5 tokens per interval
+            interval: 10, // Refill every 10 seconds
+            capacity: 10, // Bucket capacity of 10 tokens
         }),
+        {
+            match: (req) => req.path === 'http://localhost:3000/api/v1/workflows/subscription/reminder', // Replace with your endpoint
+            allow: true, // Allow all requests to this endpoint
+        },
     ],
 });
 

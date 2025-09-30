@@ -10,11 +10,9 @@ import {
 
 const subscriptionRouter = Router();
 
-subscriptionRouter.get("/", (req, res) => res.json({ title: "all subscription  " }));
 
 subscriptionRouter.get("/upcomming-renewals", authorize, getUpcomingRenewals);
 
-subscriptionRouter.get("/:id", (req, res) => res.json({ title: "get subscription details  " }));
 
 subscriptionRouter.post("/", authorize, createSubscription);
 

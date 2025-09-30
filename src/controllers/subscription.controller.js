@@ -1,7 +1,9 @@
 import { workflowClient } from "../config/upstash.js";
 import Subscription from "../models/subscription.model.js";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
+dotenv.config();
 
 export const createSubscription = async (req, res, next) => {
     try {
@@ -17,6 +19,7 @@ export const createSubscription = async (req, res, next) => {
             },
             headers: {
                 'content-type': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
             },
             retries: 0,
         });
@@ -29,7 +32,17 @@ export const createSubscription = async (req, res, next) => {
         });
 
     } catch (error) {
-        next(error);
+        if (error.response) {
+            // Server responded with a status other than 2xx
+            console.error("Response data:", error.response.data);
+            console.error("Response status:", error.response.status);
+        } else if (error.request) {
+            // Request was made but no response received
+            console.error("Request data:", error.request);
+        } else {
+            // Something happened in setting up the request
+            console.error("Error message:", error);
+        }        next(error);
     }
 }
 
